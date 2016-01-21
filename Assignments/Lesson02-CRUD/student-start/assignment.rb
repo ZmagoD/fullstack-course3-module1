@@ -78,7 +78,7 @@ class Solution
 
   def find_group_results(group, offset, limit)
     #place solution here
-    @coll.find( :group => group).projection(group:0, _id:0).sort({:secs => 1}).skip(offset).limit(limit)
+    @coll.find( :group => group ).projection(group:0, _id:0).sort({:secs => 1}).skip(offset).limit(limit)
   end
 
   #
@@ -87,10 +87,12 @@ class Solution
 
   def find_between(min, max)
     #place solution here
+    @coll.find( :secs => { :$lt => min, :$gt => max })
   end
 
   def find_by_letter(letter, offset, limit)
     #place solution here
+    @coll.find( :last_name => { :$regex => "^#{letter.upercase}.+" } ).sort(:last_name => 1).skip(offset).limit(limit)
   end
 
   #
@@ -99,10 +101,12 @@ class Solution
 
   def update_racer(racer)
     #place solution here
+    @coll.find( :_id => racer["_id"] ).replace_one(racer)
   end
 
   def add_time(number, secs)
     #place solution here
+    @coll.find(number: number).update_one(:$inc => {:secs => secs})
   end
 
 end
